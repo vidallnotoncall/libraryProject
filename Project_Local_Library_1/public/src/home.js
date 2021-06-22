@@ -8,7 +8,9 @@ function getTotalAccountsCount(accounts) {
 
 function getBooksBorrowedCount(books) {
   let borrowedBooks = 0;
+  //loop through books array
   books.forEach((book) => {
+    //increase borrowed book amount borrowed is false
     if (book['borrows'][0]['returned'] === false){
       borrowedBooks += 1;
     }
@@ -19,8 +21,9 @@ function getBooksBorrowedCount(books) {
 function getMostCommonGenres(books) {
 
   const commonBooks = books.reduce((acc, book) => {
+    
     const count = books.filter(bookSelect => bookSelect['genre'] === book['genre']).length
-
+    //
     if (!acc.some(currentBook => currentBook.name === book.genre)){
       acc.push({name: book.genre, count: count})
       return acc
@@ -28,7 +31,7 @@ function getMostCommonGenres(books) {
 
     return acc;
   },[]);
-console.log(commonBooks)
+
 return commonBooks.sort((a,b) => {
     return b.count-a.count;
   }).slice(0,5);   
@@ -49,7 +52,7 @@ function getMostPopularBooks(books) {
     return acc;
   },[])
 
-  console.log(popBooks)
+  //return new array after sorting it and slicing it down to 5
   return popBooks.sort((a,b) => {
     return b.count-a.count;
   }).slice(0,5);
@@ -67,19 +70,23 @@ function getTotalBorrows(books){
 function getMostPopularAuthors(books, authors) {
   //loop author
   const popAuthors = authors.reduce((acc, author) => {
+    //grab current authors books
     const bookFilter = books.filter(book => author["id"] === book["authorId"]);
 
     const count = getTotalBorrows(bookFilter);
 
     const authorName = author["name"]["first"] + " " + author["name"]["last"]
-
+      //if the current author in loop matches names with the chosen author push the accumulator
       if (!acc.some(currentAuthor => currentAuthor.name === authorName)){
         acc.push({name: authorName, count: count})
+        //return the accumulator for next cycle
       return acc
     }
+    //return the new array
       return acc
   }, [])
-  
+
+  //return new array after sorting it and slicing it down to 5
   return popAuthors.sort((a,b) =>{
     return b.count - a.count
   }).slice(0,5);
